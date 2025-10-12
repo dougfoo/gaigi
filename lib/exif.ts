@@ -14,19 +14,30 @@ export interface ExifData {
  */
 export async function extractExifData(file: File): Promise<ExifData> {
   try {
+    // TODO: Remove debug logging before production deployment
+    console.log('Attempting to extract EXIF from file:', file.name, file.type);
+
     // Parse EXIF data from the image
     const exif = await exifr.parse(file, {
       gps: true,
-      pick: ['latitude', 'longitude', 'DateTimeOriginal', 'CreateDate'],
+      pick: ['latitude', 'longitude', 'DateTimeOriginal', 'CreateDate', 'GPSLatitude', 'GPSLongitude'],
     });
 
+    // TODO: Remove debug logging before production deployment
+    console.log('EXIF data parsed:', exif);
+
     if (!exif) {
+      // TODO: Remove debug logging before production deployment
+      console.log('No EXIF data found in image');
       return { hasGPS: false };
     }
 
-    // Extract GPS coordinates
+    // Extract GPS coordinates (exifr provides these in decimal degrees)
     const latitude = exif.latitude;
     const longitude = exif.longitude;
+
+    // TODO: Remove debug logging before production deployment
+    console.log('GPS coordinates:', { latitude, longitude });
 
     // Extract timestamp
     let timestamp: Date | undefined;
@@ -36,12 +47,17 @@ export async function extractExifData(file: File): Promise<ExifData> {
       timestamp = new Date(exif.CreateDate);
     }
 
-    return {
+    const result = {
       latitude,
       longitude,
       timestamp,
       hasGPS: !!(latitude && longitude),
     };
+
+    // TODO: Remove debug logging before production deployment
+    console.log('EXIF extraction result:', result);
+
+    return result;
   } catch (error) {
     console.error('Error extracting EXIF data:', error);
     return { hasGPS: false };
