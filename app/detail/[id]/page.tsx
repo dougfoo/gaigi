@@ -115,14 +115,10 @@ export default function DetailPage() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Reported</p>
               <p className="font-semibold">
-                {sighting.createdAt instanceof Date
-                  ? sighting.createdAt.toLocaleDateString()
-                  : new Date(sighting.createdAt).toLocaleDateString()}
+                {(sighting.createdAt as Date).toLocaleDateString()}
               </p>
               <p className="text-sm text-gray-600">
-                {sighting.createdAt instanceof Date
-                  ? sighting.createdAt.toLocaleTimeString()
-                  : new Date(sighting.createdAt).toLocaleTimeString()}
+                {(sighting.createdAt as Date).toLocaleTimeString()}
               </p>
             </div>
 
@@ -136,9 +132,7 @@ export default function DetailPage() {
             <div>
               <p className="text-sm text-gray-500 mb-1">Last Updated</p>
               <p className="font-semibold">
-                {sighting.updatedAt instanceof Date
-                  ? sighting.updatedAt.toLocaleDateString()
-                  : new Date(sighting.updatedAt).toLocaleDateString()}
+                {(sighting.updatedAt as Date).toLocaleDateString()}
               </p>
             </div>
           </div>
