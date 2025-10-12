@@ -86,10 +86,10 @@ export default function ViewList() {
                     </span>
                   </div>
 
-                  <h3 className="font-semibold text-lg mb-1">{sighting.thingDescription}</h3>
+                  <h3 className="font-semibold text-lg mb-1 text-blue-900">{sighting.thingDescription}</h3>
 
                   {sighting.textDescription && (
-                    <p className="text-gray-600 text-sm mb-2 line-clamp-2">
+                    <p className="text-amber-700 text-sm mb-2 line-clamp-2">
                       {sighting.textDescription}
                     </p>
                   )}

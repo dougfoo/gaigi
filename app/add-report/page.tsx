@@ -163,7 +163,7 @@ export default function AddReport() {
           <select
             value={formData.thingType}
             onChange={(e) => setFormData({ ...formData, thingType: e.target.value as any })}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-black"
             required
           >
             <option value="">Select type...</option>
@@ -184,7 +184,7 @@ export default function AddReport() {
               step="any"
               value={formData.latitude}
               onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-black"
               placeholder="37.7749"
               required
             />
@@ -198,7 +198,7 @@ export default function AddReport() {
               step="any"
               value={formData.longitude}
               onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-black"
               placeholder="-122.4194"
               required
             />
@@ -216,7 +216,7 @@ export default function AddReport() {
           <textarea
             value={formData.textDescription}
             onChange={(e) => setFormData({ ...formData, textDescription: e.target.value })}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-black"
             rows={4}
             placeholder="Add any additional details..."
           />
