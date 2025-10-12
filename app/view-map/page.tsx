@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
-import { type Sighting } from '@/lib/mockData';
+import { type Sighting } from '@/lib/firestore';
 
 const mapContainerStyle = {
   width: '100%',

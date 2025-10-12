@@ -1,11 +1,16 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getAllSightings, createSighting, type Sighting } from '@/lib/mockData';
+import { getAllSightings, createSighting } from '@/lib/firestore';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
     // Get all sightings
-    const sightings = getAllSightings();
-    return res.status(200).json({ sightings });
+    try {
+      const sightings = await getAllSightings();
+      return res.status(200).json({ sightings });
+    } catch (error) {
+      console.error('Error fetching sightings:', error);
+      return res.status(500).json({ error: 'Failed to fetch sightings' });
+    }
   }
 
   if (req.method === 'POST') {
@@ -18,7 +23,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(400).json({ error: 'Missing required fields' });
       }
 
-      const newSighting = createSighting({
+      const sightingId = await createSighting({
         userId: data.userId || null,
         imageUrl: data.imageUrl,
         thumbnailUrl: data.thumbnailUrl || data.imageUrl,
@@ -29,9 +34,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         locationVerified: data.locationVerified || false,
         textDescription: data.textDescription || '',
         isAnonymous: data.userId ? false : true,
-      });
+      } as any);
 
-      return res.status(201).json({ sighting: newSighting });
+      return res.status(201).json({ id: sightingId, success: true });
     } catch (error) {
       console.error('Error creating sighting:', error);
       return res.status(500).json({ error: 'Failed to create sighting' });

@@ -91,16 +91,23 @@ export default function AddReport() {
     setIsSubmitting(true);
 
     try {
-      // Step 1: Upload image (mock for now)
+      // Step 1: Upload image to Firebase Storage
+      const formDataUpload = new FormData();
+      formDataUpload.append('image', selectedFile);
+      formDataUpload.append('userId', 'null'); // Anonymous for now
+
       const uploadRes = await fetch('/api/upload', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename: selectedFile.name }),
+        body: formDataUpload,
       });
 
-      if (!uploadRes.ok) throw new Error('Upload failed');
+      if (!uploadRes.ok) {
+        const errorData = await uploadRes.json();
+        throw new Error(errorData.error || 'Upload failed');
+      }
 
       const { imageUrl, thumbnailUrl } = await uploadRes.json();
+      console.log('Image uploaded successfully:', { imageUrl, thumbnailUrl });
 
       // Step 2: Create sighting
       const sightingRes = await fetch('/api/sightings', {

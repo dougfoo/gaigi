@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { type Sighting } from '@/lib/mockData';
+import { type Sighting } from '@/lib/firestore';
 
 export default function ViewList() {
   const [sightings, setSightings] = useState<Sighting[]>([]);

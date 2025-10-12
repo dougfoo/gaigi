@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { type Sighting } from '@/lib/mockData';
+import { type Sighting } from '@/lib/firestore';
 
 export default function DetailPage() {
   const params = useParams();

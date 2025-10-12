@@ -1,7 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import formidable from 'formidable';
+import fs from 'fs/promises';
+import { uploadImage, generateImagePath, createThumbnail } from '@/lib/storage';
 
-// Temporary mock upload endpoint
-// In Phase 2, this will handle actual image uploads to Firebase Storage
+// Disable body parser for file upload
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
@@ -9,14 +16,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // TODO: In Phase 2, implement actual file upload to Firebase Storage
-    // For now, just return a mock URL
-    const mockImageUrl = `https://via.placeholder.com/800x600?text=Uploaded+Image+${Date.now()}`;
-    const mockThumbnailUrl = `https://via.placeholder.com/200x150?text=Thumbnail+${Date.now()}`;
+    // Parse form data
+    const form = formidable({});
+    const [fields, files] = await form.parse(req);
+
+    const imageFile = files.image?.[0];
+    if (!imageFile) {
+      return res.status(400).json({ error: 'No image file provided' });
+    }
+
+    // Read the file
+    const fileBuffer = await fs.readFile(imageFile.filepath);
+    const file = new File([fileBuffer], imageFile.originalFilename || 'image.jpg', {
+      type: imageFile.mimetype || 'image/jpeg',
+    });
+
+    // Generate storage paths
+    const userId = fields.userId?.[0] || null;
+    const imagePath = generateImagePath(userId, file.name);
+    const thumbnailPath = generateImagePath(userId, `thumb_${file.name}`);
+
+    // Upload original image
+    console.log('Uploading original image to Firebase Storage...');
+    const imageUrl = await uploadImage(file, imagePath);
+
+    // Create and upload thumbnail
+    console.log('Creating and uploading thumbnail...');
+    const thumbnailBlob = await createThumbnail(file);
+    const thumbnailFile = new File([thumbnailBlob], `thumb_${file.name}`, {
+      type: 'image/jpeg',
+    });
+    const thumbnailUrl = await uploadImage(thumbnailFile, thumbnailPath);
+
+    console.log('Upload successful!', { imageUrl, thumbnailUrl });
 
     return res.status(200).json({
-      imageUrl: mockImageUrl,
-      thumbnailUrl: mockThumbnailUrl,
+      imageUrl,
+      thumbnailUrl,
     });
   } catch (error) {
     console.error('Error uploading image:', error);
