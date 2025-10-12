@@ -94,7 +94,7 @@ export default function DetailPage() {
           </div>
 
           {/* Description */}
-          <h1 className="text-2xl font-bold mb-2">{sighting.thingDescription}</h1>
+          <h1 className="text-2xl font-bold mb-2 text-blue-900">{sighting.thingDescription}</h1>
 
           {sighting.textDescription && (
             <p className="text-gray-700 mb-6">{sighting.textDescription}</p>
