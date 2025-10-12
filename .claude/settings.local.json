@@ -8,7 +8,9 @@
       "Bash(git push:*)",
       "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-src-dir --import-alias \"@/*\")",
       "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --skip-install)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run dev:*)"
     ],
     "deny": [],
     "ask": []

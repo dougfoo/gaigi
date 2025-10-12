@@ -36,18 +36,13 @@ lerna-debug.log*
 .DS_Store
 Thumbs.db
 
-# Firebase
+# Firebase (Phase 2+)
 .firebase/
 firebase-debug.log
 firestore-debug.log
 
-# PWA
-public/sw.js
-public/workbox-*.js
-public/worker-*.js
-public/sw.js.map
-public/workbox-*.js.map
-public/worker-*.js.map
+# Environment
+.env*.local
 
 # Misc
 *.pem
