@@ -82,7 +82,9 @@ export default function ViewList() {
                       </span>
                     </div>
                     <span className="text-sm text-gray-500">
-                      {new Date(sighting.createdAt).toLocaleDateString()} {new Date(sighting.createdAt).toLocaleTimeString()}
+                      {sighting.createdAt instanceof Date
+                        ? `${sighting.createdAt.toLocaleDateString()} ${sighting.createdAt.toLocaleTimeString()}`
+                        : `${new Date(sighting.createdAt).toLocaleDateString()} ${new Date(sighting.createdAt).toLocaleTimeString()}`}
                     </span>
                   </div>
 
