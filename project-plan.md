@@ -69,21 +69,25 @@ sightings/{sightingId} {
 /gaigi
   /pages
     /api                    # Backend API routes
-      sightings.js          # GET/POST sightings
-      upload.js             # Image upload endpoint
-      [id].js               # Update/delete specific sighting
-    index.js                # Home page with map
-    my-uploads.js           # User dashboard
+      sightings.js          # GET all sightings
+      /sightings
+        [id].js             # GET/PUT/DELETE specific sighting
+      upload.js             # POST image upload & create sighting
+    index.js                # Home page (3 buttons)
+    add-report.js           # Add report page (photo + form)
+    view-map.js             # Map view page
+    view-list.js            # List/table view page
+    detail/[id].js          # Detail view page
     _app.js                 # Next.js app wrapper
-    _document.js            # Custom HTML document
 
   /components
-    Map.jsx                 # Google Maps component
-    UploadForm.jsx          # Photo upload form
-    SightingCard.jsx        # Sighting display card
-    FilterBar.jsx           # Type filter UI
-    Header.jsx              # App header with auth
+    Header.jsx              # Header with login/logout button
     Layout.jsx              # Page layout wrapper
+    MapView.jsx             # Google Maps component with markers
+    SightingList.jsx        # Table/list of sightings
+    SightingDetail.jsx      # Detail view component
+    ReportForm.jsx          # Photo upload + metadata form
+    LocationPicker.jsx      # Map-based location picker
 
   /lib
     firebase.js             # Firebase initialization
@@ -91,11 +95,9 @@ sightings/{sightingId} {
     storage.js              # Firebase Storage helpers
     visionAI.js             # Google Vision AI integration
     geolocation.js          # Location utilities
-    auth.js                 # Auth utilities
 
   /hooks
     useGeolocation.js       # Geolocation hook
-    useImageUpload.js       # Image upload hook
     useAuth.js              # Firebase auth hook
 
   /public
@@ -111,28 +113,66 @@ sightings/{sightingId} {
   .env.local                # Environment variables
 ```
 
+## UI Design (Simple & Minimal)
+
+### Home Page (Landing)
+```
+┌─────────────────────────────────┐
+│  [Login/Logout]                 │
+├─────────────────────────────────┤
+│                                 │
+│     🚨 GAIGI                    │
+│     Report Suspicious Things    │
+│                                 │
+│  [ 📷 Add Report ]              │
+│                                 │
+│  [ 🗺️  View Map ]               │
+│                                 │
+│  [ 📋 View List ]               │
+│                                 │
+└─────────────────────────────────┘
+```
+
+### Add Report Flow
+1. Click "Add Report" → Camera/Photo picker opens
+2. Take/select photo
+3. Form appears with:
+   - **Location:** Auto-detected (can override with map picker) - REQUIRED
+   - **Type:** Auto-detected dropdown (person/animal/object) - REQUIRED
+   - **Description:** Text field - OPTIONAL
+4. Submit → Returns to home
+
+### View Map Page
+- Google Map with markers for all sightings
+- Click marker → Shows detail popup (photo + metadata)
+- Back button to home
+
+### View List Page
+- Table/List view sorted by most recent
+- Shows: thumbnail, type, location, date, description snippet
+- Click row → Detail view
+- Back button to home
+
+### Detail View
+- Large photo
+- Type badge
+- Location (lat/long or address)
+- Description
+- Timestamp
+- Back button
+
 ## Customer Journey
 
-1. **Anonymous Upload:**
-   - User opens app
-   - Takes/selects photo
-   - App auto-detects thing type (person/animal/object)
-   - App extracts GPS from photo EXIF or uses device location
-   - User can verify/adjust location on map
-   - User adds optional text description
-   - Photo uploaded anonymously
+1. **Anonymous User:**
+   - Opens app → sees 3 buttons (Add Report, View Map, View List)
+   - Click "Add Report" → take photo → fill form → submit
+   - Click "View Map" → see all sightings on map → click marker for details
+   - Click "View List" → see table of sightings → click row for details
 
-2. **Authenticated User:**
-   - User logs in with Google
-   - Can see "My Uploads" section
-   - Can edit/delete own sightings
-   - Same upload flow as anonymous
-
-3. **Map Viewing:**
-   - Users see map of local area
-   - Markers show sightings with thumbnails
-   - Filter by thing type (person/animal/object)
-   - Click marker to see full photo + details
+2. **Authenticated User (after login):**
+   - Same as anonymous
+   - Can edit/delete own reports from detail view
+   - "Logout" button visible in header
 
 ## Development Plan
 
