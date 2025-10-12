@@ -92,10 +92,7 @@ export default function ViewMap() {
                 <Marker
                   key={sighting.id}
                   position={{ lat: sighting.latitude, lng: sighting.longitude }}
-                  icon={{
-                    url: getMarkerIcon(sighting.thingType),
-                    scaledSize: new window.google.maps.Size(32, 32),
-                  }}
+                  icon={getMarkerIcon(sighting.thingType)}
                   onClick={() => setSelectedSighting(sighting)}
                 />
               ))}
