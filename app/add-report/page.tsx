@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { extractExifData, getBrowserLocation } from '@/lib/exif';
 
 export default function AddReport() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function AddReport() {
     textDescription: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [locationSource, setLocationSource] = useState<'exif' | 'browser' | 'manual'>('manual');
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -29,24 +31,53 @@ export default function AddReport() {
     };
     reader.readAsDataURL(file);
 
-    // TODO: Extract EXIF location data
-    // TODO: Auto-detect thing type with Vision AI
+    // Extract EXIF data from the image
+    try {
+      const exifData = await extractExifData(file);
 
-    // For now, get browser geolocation as fallback
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
+      if (exifData.hasGPS && exifData.latitude && exifData.longitude) {
+        // Use GPS data from photo EXIF
+        setFormData(prev => ({
+          ...prev,
+          latitude: exifData.latitude!.toFixed(6),
+          longitude: exifData.longitude!.toFixed(6),
+        }));
+        setLocationSource('exif');
+        console.log('Location extracted from photo EXIF data');
+      } else {
+        // Fallback to browser geolocation
+        try {
+          const browserLocation = await getBrowserLocation();
           setFormData(prev => ({
             ...prev,
-            latitude: position.coords.latitude.toFixed(6),
-            longitude: position.coords.longitude.toFixed(6),
+            latitude: browserLocation.latitude.toFixed(6),
+            longitude: browserLocation.longitude.toFixed(6),
           }));
-        },
-        (error) => {
-          console.error('Error getting location:', error);
+          setLocationSource('browser');
+          console.log('Location obtained from browser geolocation');
+        } catch (error) {
+          console.error('Error getting browser location:', error);
+          setLocationSource('manual');
         }
-      );
+      }
+    } catch (error) {
+      console.error('Error extracting EXIF data:', error);
+      // Try browser geolocation as fallback
+      try {
+        const browserLocation = await getBrowserLocation();
+        setFormData(prev => ({
+          ...prev,
+          latitude: browserLocation.latitude.toFixed(6),
+          longitude: browserLocation.longitude.toFixed(6),
+        }));
+        setLocationSource('browser');
+      } catch (error) {
+        console.error('Error getting browser location:', error);
+        setLocationSource('manual');
+      }
     }
+
+    // TODO: Auto-detect thing type with Vision AI
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -205,7 +236,9 @@ export default function AddReport() {
           </div>
         </div>
         <p className="text-sm text-gray-500">
-          Location auto-detected from your device
+          {locationSource === 'exif' && '📷 Location extracted from photo GPS data'}
+          {locationSource === 'browser' && '📍 Location detected from your device'}
+          {locationSource === 'manual' && 'Enter location manually or allow location access'}
         </p>
 
         {/* Description */}
