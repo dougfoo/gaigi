@@ -8,7 +8,7 @@ import { type Sighting } from '@/lib/firestore';
 export default function DetailPage() {
   const params = useParams();
   const router = useRouter();
-  const id = params.id as string;
+  const id = params?.id as string;
 
   const [sighting, setSighting] = useState<Sighting | null>(null);
   const [loading, setLoading] = useState(true);
