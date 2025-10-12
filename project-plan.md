@@ -6,14 +6,14 @@ A mobile-first web app for anonymous reporting and mapping of "things" (people, 
 ## Architecture Overview
 
 **Tech Stack:**
-- **Frontend:** React.js PWA (Progressive Web App) - works on mobile browsers, installable optionally
-- **Backend:** Express.js (Node.js)
+- **Framework:** Next.js (React framework with built-in API routes)
 - **Database:** Firebase Firestore (GCP, easy to deploy, no PostGIS setup needed)
-- **Storage:** Google Cloud Storage for images
+- **Storage:** Firebase Storage (Google Cloud Storage)
 - **Maps:** Google Maps JavaScript API
 - **Auth:** Google OAuth 2.0 (Firebase Auth)
 - **Image Analysis:** Google Vision AI
-- **Hosting:** Firebase Hosting (frontend) + Cloud Run (backend) or Firebase Functions
+- **Hosting:** Vercel (easiest for Next.js) or Firebase Hosting
+- **PWA:** Next.js PWA plugin for Progressive Web App capabilities
 
 ## Database Schema (Firestore)
 
@@ -67,49 +67,48 @@ sightings/{sightingId} {
 
 ```
 /gaigi
-  /frontend (React PWA)
-    /public
-      manifest.json
-      service-worker.js
-    /src
-      /components
-        Map.jsx
-        UploadForm.jsx
-        SightingCard.jsx
-        FilterBar.jsx
-        Header.jsx
-      /hooks
-        useGeolocation.js
-        useImageUpload.js
-      /services
-        api.js
-        firebase.js
-        maps.js
-      /pages
-        Home.jsx
-        MySightings.jsx
-        Upload.jsx
-      App.jsx
-      index.js
-    package.json
-    .env.local
+  /pages
+    /api                    # Backend API routes
+      sightings.js          # GET/POST sightings
+      upload.js             # Image upload endpoint
+      [id].js               # Update/delete specific sighting
+    index.js                # Home page with map
+    my-uploads.js           # User dashboard
+    _app.js                 # Next.js app wrapper
+    _document.js            # Custom HTML document
 
-  /backend (Express.js API)
-    /routes
-      sightings.js
-      upload.js
-    /services
-      imageAnalysis.js
-      storage.js
-      geolocation.js
-    /middleware
-      auth.js
-    server.js
-    package.json
-    .env
+  /components
+    Map.jsx                 # Google Maps component
+    UploadForm.jsx          # Photo upload form
+    SightingCard.jsx        # Sighting display card
+    FilterBar.jsx           # Type filter UI
+    Header.jsx              # App header with auth
+    Layout.jsx              # Page layout wrapper
 
-  firebase.json
-  .firebaserc
+  /lib
+    firebase.js             # Firebase initialization
+    firestore.js            # Firestore helpers
+    storage.js              # Firebase Storage helpers
+    visionAI.js             # Google Vision AI integration
+    geolocation.js          # Location utilities
+    auth.js                 # Auth utilities
+
+  /hooks
+    useGeolocation.js       # Geolocation hook
+    useImageUpload.js       # Image upload hook
+    useAuth.js              # Firebase auth hook
+
+  /public
+    manifest.json           # PWA manifest
+    icons/                  # App icons
+
+  /styles
+    globals.css
+    Home.module.css
+
+  next.config.js            # Next.js configuration
+  package.json
+  .env.local                # Environment variables
 ```
 
 ## Customer Journey
@@ -138,40 +137,61 @@ sightings/{sightingId} {
 ## Development Plan
 
 ### Phase 1: Local Setup
-1. Initialize React app with Create React App
-2. Set up Express backend server
-3. Configure Firebase project (Firestore, Auth, Storage)
-4. Set up local environment variables
+1. Initialize Next.js app with `create-next-app`
+2. Install and configure Firebase SDK (Firestore, Auth, Storage)
+3. Set up Next.js PWA plugin
+4. Configure environment variables (.env.local)
+5. Set up Firebase project in GCP console
 
 ### Phase 2: Core Features
-5. Implement image upload with EXIF extraction
-6. Build Google Vision AI integration for auto-classification
-7. Create map interface with Google Maps API
-8. Build upload form with location selection
-9. Implement Firestore queries with geohashing
+6. Create Firebase initialization and helper utilities
+7. Build API route: `/api/upload` with EXIF extraction
+8. Integrate Google Vision AI for image classification
+9. Build API route: `/api/sightings` (GET/POST)
+10. Create home page with Google Maps component
+11. Implement geohashing for Firestore location queries
+12. Build upload form with location selection
 
 ### Phase 3: Authentication
-10. Add Google OAuth with Firebase Auth
-11. Implement user dashboard (My Uploads)
-12. Add edit/delete functionality for authenticated users
+13. Add Firebase Auth with Google OAuth
+14. Create auth context and useAuth hook
+15. Build "My Uploads" page
+16. Add API routes for update/delete with auth middleware
+17. Implement edit/delete functionality
 
 ### Phase 4: Polish
-13. Add PWA capabilities (manifest, service worker)
-14. Implement marker clustering on map
-15. Add filtering UI
-16. Optimize images (thumbnails)
+18. Add PWA manifest and icons
+19. Implement marker clustering on map
+20. Build filter UI for thing types
+21. Add image optimization (Next.js Image + thumbnails)
+22. Add loading states and error handling
+23. Make responsive for mobile
 
 ### Phase 5: Deployment
-17. Deploy backend to Cloud Run
-18. Deploy frontend to Firebase Hosting
-19. Set up environment variables in GCP
-20. Test production build
+24. Deploy to Vercel (one-click deployment)
+25. Configure environment variables in Vercel
+26. Set up Firebase security rules
+27. Test production build on mobile
+28. Configure custom domain (optional)
 
 ## Environment Setup Required
 
-- Node.js & npm
-- Firebase CLI (`npm install -g firebase-tools`)
-- Google Cloud SDK (gcloud CLI)
-- Firebase project created in GCP
-- Google Maps API key
-- Google Vision API enabled
+- Node.js & npm (v18+ recommended)
+- Firebase project created in GCP console
+- Google Maps API key (with Maps JavaScript API enabled)
+- Google Vision API enabled in GCP
+- Vercel account (for deployment)
+
+## Key Dependencies
+
+```json
+{
+  "next": "^14.x",
+  "react": "^18.x",
+  "firebase": "^10.x",
+  "next-pwa": "^5.x",
+  "@react-google-maps/api": "^2.x",
+  "exifr": "^7.x",
+  "geohash": "^0.x"
+}
+```

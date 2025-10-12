@@ -4,14 +4,13 @@ A mobile-first web app for anonymous reporting and mapping of "things" (people, 
 
 ## Tech Stack
 
-- **Frontend:** React.js PWA
-- **Backend:** Express.js (Node.js)
+- **Framework:** Next.js (React with built-in API routes)
 - **Database:** Firebase Firestore
-- **Storage:** Google Cloud Storage
+- **Storage:** Firebase Storage
 - **Maps:** Google Maps JavaScript API
 - **Auth:** Google OAuth 2.0 (Firebase Auth)
 - **Image Analysis:** Google Vision AI
-- **Hosting:** Firebase Hosting + Cloud Run
+- **Hosting:** Vercel (or Firebase Hosting)
 
 ## Features
 
