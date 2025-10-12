@@ -7,9 +7,12 @@ export default function Home() {
       </div>
 
       <div className="flex flex-col gap-4 w-full max-w-md">
-        <button className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+        <a
+          href="/add-report"
+          className="bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition text-center"
+        >
           📷 Add Report
-        </button>
+        </a>
 
         <button className="bg-green-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-green-700 transition">
           🗺️ View Map
