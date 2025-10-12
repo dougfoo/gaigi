@@ -21,9 +21,12 @@ export default function Home() {
           🗺️ View Map
         </a>
 
-        <button className="bg-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition">
+        <a
+          href="/view-list"
+          className="bg-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-purple-700 transition text-center"
+        >
           📋 View List
-        </button>
+        </a>
       </div>
 
       <div className="mt-8">
