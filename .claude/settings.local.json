@@ -5,7 +5,10 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(gh repo create:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-src-dir --import-alias \"@/*\")",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --skip-install)",
+      "Bash(npm install:*)"
     ],
     "deny": [],
     "ask": []

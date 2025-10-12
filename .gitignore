@@ -9,6 +9,8 @@ coverage/
 # Production
 build/
 dist/
+.next/
+out/
 
 # Environment variables
 .env
@@ -36,9 +38,18 @@ Thumbs.db
 
 # Firebase
 .firebase/
-.firebaserc
 firebase-debug.log
 firestore-debug.log
 
+# PWA
+public/sw.js
+public/workbox-*.js
+public/worker-*.js
+public/sw.js.map
+public/workbox-*.js.map
+public/worker-*.js.map
+
 # Misc
 *.pem
+*.tsbuildinfo
+next-env.d.ts
