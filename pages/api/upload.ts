@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
 import fs from 'fs/promises';
-import { uploadImage, generateImagePath, createThumbnail } from '@/lib/storage';
+import sharp from 'sharp';
+import { uploadImage, generateImagePath } from '@/lib/storage';
 
 // Disable body parser for file upload
 export const config = {
@@ -40,10 +41,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log('Uploading original image to Firebase Storage...');
     const imageUrl = await uploadImage(file, imagePath);
 
-    // Create and upload thumbnail
+    // Create and upload thumbnail using sharp
     console.log('Creating and uploading thumbnail...');
-    const thumbnailBlob = await createThumbnail(file);
-    const thumbnailFile = new File([thumbnailBlob], `thumb_${file.name}`, {
+    const thumbnailBuffer = await sharp(fileBuffer)
+      .resize(200, 150, {
+        fit: 'inside',
+        withoutEnlargement: true
+      })
+      .jpeg({ quality: 80 })
+      .toBuffer();
+
+    const thumbnailFile = new File([thumbnailBuffer], `thumb_${file.name}`, {
       type: 'image/jpeg',
     });
     const thumbnailUrl = await uploadImage(thumbnailFile, thumbnailPath);
