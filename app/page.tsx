@@ -71,7 +71,7 @@ export default function Home() {
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-gray-600">Version 1.0.0</p>
-                <p className="text-sm text-gray-600">Released: January 2025</p>
+                <p className="text-sm text-gray-600">Released: October 13, 2025</p>
               </div>
 
               <div>
