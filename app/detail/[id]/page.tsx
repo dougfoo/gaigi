@@ -17,7 +17,13 @@ export default function DetailPage() {
     fetch('/api/sightings')
       .then(res => res.json())
       .then(data => {
-        const found = data.sightings?.find((s: Sighting) => s.id === id);
+        // Convert ISO string dates back to Date objects
+        const sightings = (data.sightings || []).map((s: any) => ({
+          ...s,
+          createdAt: new Date(s.createdAt),
+          updatedAt: new Date(s.updatedAt),
+        }));
+        const found = sightings.find((s: Sighting) => s.id === id);
         setSighting(found || null);
         setLoading(false);
       })
