@@ -160,7 +160,6 @@ export default function AddReport() {
               <input
                 type="file"
                 accept="image/*"
-                capture="environment"
                 onChange={handleFileChange}
                 className="hidden"
                 id="photo-input"
@@ -171,6 +170,7 @@ export default function AddReport() {
               >
                 📷 Take/Select Photo
               </label>
+              <p className="text-sm text-gray-500 mt-2">Take a photo or select from gallery</p>
             </div>
           ) : (
             <div className="relative">
