@@ -55,20 +55,27 @@ export default function AddReport() {
           }
         });
 
+        // Build human-readable address (never show GPS coordinates)
         if (street && neighborhood) {
-          return `${street}, ${neighborhood}, ${prefecture}`;
+          return `${street}, ${neighborhood}, ${prefecture || locality}`;
         } else if (neighborhood && locality) {
-          return `${neighborhood}, ${locality}, ${prefecture}`;
+          return `${neighborhood}, ${locality}, ${prefecture || ''}`.replace(/, $/, '');
         } else if (locality && prefecture) {
           return `${locality}, ${prefecture}`;
         } else if (prefecture) {
           return prefecture;
+        } else if (locality) {
+          return locality;
+        } else if (neighborhood) {
+          return neighborhood;
         }
+        // If no address components, return a generic message
+        return 'Address not available';
       }
-      return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+      return 'Address not available';
     } catch (error) {
       console.error('Reverse geocoding error:', error);
-      return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+      return 'Address not available';
     }
   };
 

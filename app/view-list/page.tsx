@@ -97,7 +97,7 @@ export default function ViewList() {
           }
         });
 
-        // Build short address prioritizing most specific info
+        // Build short address prioritizing most specific info (never show GPS)
         // Format: "Street, Neighborhood" > "Neighborhood, Locality" > "Locality, Prefecture"
         if (street && neighborhood) {
           return `${street}, ${neighborhood}`;
@@ -111,12 +111,18 @@ export default function ViewList() {
           return `${city}, ${prefecture}`;
         } else if (prefecture) {
           return prefecture;
+        } else if (neighborhood) {
+          return neighborhood;
+        } else if (city) {
+          return city;
         }
+        // If no address components found, return generic message
+        return 'Address unavailable';
       }
 
-      return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      return 'Address unavailable';
     } catch (error) {
-      return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      return 'Address unavailable';
     }
   };
 
@@ -198,7 +204,7 @@ export default function ViewList() {
                   )}
 
                   <div className="flex items-center text-sm text-gray-500 flex-wrap gap-2">
-                    <span>📍 {sighting.address || `${sighting.latitude.toFixed(4)}, ${sighting.longitude.toFixed(4)}`}</span>
+                    <span>📍 {sighting.address || 'Address unavailable'}</span>
                     {sighting.isAnonymous && <span className="text-xs bg-gray-200 px-2 py-1 rounded">Anonymous</span>}
                   </div>
                 </div>

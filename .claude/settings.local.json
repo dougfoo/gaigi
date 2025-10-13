@@ -27,7 +27,8 @@
       "Bash(~/google-cloud-sdk/bin/gcloud run services logs read gaigi --limit 20)",
       "Bash(~/google-cloud-sdk/bin/gcloud services enable vision.googleapis.com --project=gaigi-1f735)",
       "Bash(git log:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(npm run version:*)"
     ],
     "deny": [],
     "ask": []

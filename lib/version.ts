@@ -1,14 +1,14 @@
 // Auto-generated at build time - DO NOT EDIT
 export const VERSION = {
-  version: '1.4.0',
-  hash: 'd6ab0ff4edee27574f400fefd9ac3bebee612045',
-  buildDate: '2025-10-13T10:44:52.700Z',
+  version: '1.4.1',
+  hash: '26d68ad25ff4d294abec65b15fd5f5b4b9b019df',
+  buildDate: '2025-10-13T12:10:56.941Z',
   recentChanges: [
+  "Fix changelog display: commit version.ts to git",
+  "Update version file with latest changelog",
   "Release v1.4.0: Add AI-powered auto-type detection",
   "Fix type error in map InfoWindow badge",
-  "Release v1.3.0: Expand types and add address-based location input",
-  "manual commit of latest plan and version file",
-  "Release v1.2.1: Mobile-friendly list view and auto-generated changelog"
+  "Release v1.3.0: Expand types and add address-based location input"
 ],
 };
 
