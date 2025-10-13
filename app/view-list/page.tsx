@@ -47,10 +47,15 @@ export default function ViewList() {
 
   const reverseGeocode = async (lat: number, lng: number): Promise<string> => {
     try {
-      const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyDMselEdH44QYeEjg1CIn0YuCnjiwjG-E0'}&language=en`
-      );
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyDMselEdH44QYeEjg1CIn0YuCnjiwjG-E0';
+      const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}&language=en`;
+
+      const response = await fetch(url);
       const data = await response.json();
+
+      if (data.status !== 'OK') {
+        return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+      }
 
       if (data.results && data.results.length > 0) {
         const result = data.results[0];
@@ -58,30 +63,50 @@ export default function ViewList() {
 
         // Extract relevant components (exclude country and postal code)
         let street = '';
+        let neighborhood = '';
         let locality = '';
         let city = '';
         let prefecture = '';
 
         components.forEach((comp: any) => {
-          if (comp.types.includes('premise') || comp.types.includes('street_address') || comp.types.includes('route')) {
+          // Get street/route/premise for specific location
+          if (comp.types.includes('route')) {
+            if (!street) street = comp.long_name;
+          } else if (comp.types.includes('premise') || comp.types.includes('street_address')) {
             if (!street) street = comp.long_name;
           }
-          if (comp.types.includes('sublocality') || comp.types.includes('locality')) {
-            if (!locality) locality = comp.long_name;
+
+          // Get neighborhood (sublocality_level_2 like "Shirokanedai")
+          if (comp.types.includes('sublocality_level_2')) {
+            neighborhood = comp.long_name;
           }
+
+          // Get locality (city like "Minato City", "Karuizawa")
+          if (comp.types.includes('locality')) {
+            locality = comp.long_name;
+          }
+
+          // Get administrative_area_level_2 (usually district/county)
           if (comp.types.includes('administrative_area_level_2')) {
-            city = comp.long_name;
+            if (!city) city = comp.long_name;
           }
+
+          // Get prefecture (administrative_area_level_1)
           if (comp.types.includes('administrative_area_level_1')) {
             prefecture = comp.long_name;
           }
         });
 
-        // Build short address (e.g., "Nagakura 2048-1452, Karuizawa" or "City, Prefecture")
-        if (street && locality) {
-          return `${street}, ${locality}`;
-        } else if (locality && city) {
-          return `${locality}, ${city}`;
+        // Build short address prioritizing most specific info
+        // Format: "Street, Neighborhood" > "Neighborhood, Locality" > "Locality, Prefecture"
+        if (street && neighborhood) {
+          return `${street}, ${neighborhood}`;
+        } else if (neighborhood && locality) {
+          return `${neighborhood}, ${locality}`;
+        } else if (locality && prefecture) {
+          return `${locality}, ${prefecture}`;
+        } else if (locality) {
+          return locality;
         } else if (city && prefecture) {
           return `${city}, ${prefecture}`;
         } else if (prefecture) {
