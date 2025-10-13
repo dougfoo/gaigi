@@ -69,8 +69,8 @@ export default function ViewMap() {
     }
   };
 
-  // Use a mock API key for development (will be replaced with env var in Phase 2)
-  const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8';
+  // Google Maps API key
+  const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyDMselEdH44QYeEjg1CIn0YuCnjiwjG-E0';
 
   return (
     <main className="min-h-screen p-4">
