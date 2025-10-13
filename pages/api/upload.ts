@@ -28,7 +28,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Read the file
     const fileBuffer = await fs.readFile(imageFile.filepath);
-    const file = new File([fileBuffer], imageFile.originalFilename || 'image.jpg', {
+
+    // Create File object for upload - convert Buffer to ArrayBuffer
+    const arrayBuffer = fileBuffer.buffer.slice(
+      fileBuffer.byteOffset,
+      fileBuffer.byteOffset + fileBuffer.byteLength
+    ) as ArrayBuffer;
+    const file = new File([arrayBuffer], imageFile.originalFilename || 'image.jpg', {
       type: imageFile.mimetype || 'image/jpeg',
     });
 
@@ -51,7 +57,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .jpeg({ quality: 80 })
       .toBuffer();
 
-    const thumbnailFile = new File([thumbnailBuffer], `thumb_${file.name}`, {
+    // Convert thumbnail Buffer to ArrayBuffer
+    const thumbnailArrayBuffer = thumbnailBuffer.buffer.slice(
+      thumbnailBuffer.byteOffset,
+      thumbnailBuffer.byteOffset + thumbnailBuffer.byteLength
+    ) as ArrayBuffer;
+    const thumbnailFile = new File([thumbnailArrayBuffer], `thumb_${file.name}`, {
       type: 'image/jpeg',
     });
     const thumbnailUrl = await uploadImage(thumbnailFile, thumbnailPath);

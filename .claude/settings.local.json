@@ -12,7 +12,8 @@
       "Bash(npm uninstall:*)",
       "Bash(npm run dev:*)",
       "Bash(firebase login:*)",
-      "Bash(firebase projects:list:*)"
+      "Bash(firebase projects:list:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
