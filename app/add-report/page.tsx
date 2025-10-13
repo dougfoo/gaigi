@@ -130,6 +130,7 @@ export default function AddReport() {
         }));
         setLocationSource('exif');
         console.log('Location extracted from photo EXIF data');
+        console.log(address);
       } else {
         // Fallback to browser geolocation
         try {
@@ -144,6 +145,7 @@ export default function AddReport() {
           }));
           setLocationSource('browser');
           console.log('Location obtained from browser geolocation');
+          console.log(address);
         } catch (error) {
           console.error('Error getting browser location:', error);
           setLocationSource('manual');
