@@ -70,12 +70,12 @@ export default function AddReport() {
           return neighborhood;
         }
         // If no address components, return a generic message
-        return 'Address not available';
+        return 'Address not available 1 ';
       }
-      return 'Address not available';
+      return 'Address not available 2 ';
     } catch (error) {
       console.error('Reverse geocoding error:', error);
-      return 'Address not available';
+      return 'Address not available 3';
     }
   };
 

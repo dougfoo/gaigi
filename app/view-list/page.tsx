@@ -28,7 +28,7 @@ export default function ViewList() {
           sightings.map(async (s: Sighting) => {
             try {
               const address = await reverseGeocode(s.latitude, s.longitude);
-              console.log(address);
+              console.log('lat: %d, add: %s',s.latitude, address);
               return { ...s, address };
             } catch (error) {
               console.error('Error geocoding:', error);
