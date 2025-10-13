@@ -1,4 +1,10 @@
+'use client';
+
 export default function Home() {
+  const handleLoginClick = () => {
+    alert('Coming soon');
+  };
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-8">
       <div className="text-center mb-12">
@@ -30,7 +36,10 @@ export default function Home() {
       </div>
 
       <div className="mt-8">
-        <button className="text-gray-600 hover:text-gray-900 underline">
+        <button
+          onClick={handleLoginClick}
+          className="text-gray-600 hover:text-gray-900 underline"
+        >
           Login
         </button>
       </div>

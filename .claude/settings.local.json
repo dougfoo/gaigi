@@ -14,7 +14,10 @@
       "Bash(firebase login:*)",
       "Bash(firebase projects:list:*)",
       "Bash(npm run build:*)",
-      "Bash(gcloud run services logs read:*)"
+      "Bash(gcloud run services logs read:*)",
+      "Bash(alias gcloud='~/google-cloud-sdk/bin/gcloud')",
+      "Bash(gcloud version:*)",
+      "Bash(~/google-cloud-sdk/bin/gcloud run deploy gaigi --source . --platform managed --region us-central1 --allow-unauthenticated)"
     ],
     "deny": [],
     "ask": []
