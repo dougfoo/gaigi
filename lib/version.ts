@@ -1,15 +1,8 @@
-// Auto-generated version file
-// Version is based on package.json and build timestamp
-import packageJson from '../package.json';
-
-// Build timestamp is set at build time
-const BUILD_TIMESTAMP = process.env.NEXT_PUBLIC_BUILD_DATE || '2025-10-13T00:00:00.000Z';
-const GIT_HASH = process.env.NEXT_PUBLIC_GIT_HASH || 'unknown';
-
+// Auto-generated at build time - DO NOT EDIT
 export const VERSION = {
-  version: packageJson.version,
-  hash: GIT_HASH,
-  buildDate: BUILD_TIMESTAMP,
+  version: '1.0.1',
+  hash: 'b187ea989299d3d8a53ae389a4fb6e9fd18ff8b6',
+  buildDate: '2025-10-13T04:51:52.180Z',
 };
 
 export function getVersionString(): string {
