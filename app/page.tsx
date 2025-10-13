@@ -87,9 +87,8 @@ export default function Home() {
 
               <div>
                 <h3 className="font-semibold mb-2">Coming Soon</h3>
-                <ul className="text-sm text-gray-700 space-y-2 list-disc list-inside">
+                <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
                   <li>User authentication with Google OAuth</li>
-                  <li>AI-powered auto-detection of objects</li>
                   <li>Advanced filtering and search</li>
                   <li>Map marker clustering</li>
                 </ul>

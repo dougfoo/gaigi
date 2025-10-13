@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "deploy": "gcloud run deploy gaiji --source . --build-service-account projects/gaigi-1f735/serviceAccounts/951551269765-compute@developer.gserviceaccount.com",
     "start": "next start",
     "lint": "next lint",
     "version": "node scripts/generate-version.js"
