@@ -127,8 +127,12 @@ export default function ViewMap() {
                     />
                     <div className="mb-1">
                       <span className={`inline-block px-2 py-1 rounded text-xs font-semibold text-white ${
-                        selectedSighting.thingType === 'person' ? 'bg-red-500' :
-                        selectedSighting.thingType === 'animal' ? 'bg-yellow-500' :
+                        selectedSighting.thingType === 'people' ? 'bg-red-500' :
+                        selectedSighting.thingType === 'animals' ? 'bg-yellow-500' :
+                        selectedSighting.thingType === 'places' ? 'bg-green-500' :
+                        selectedSighting.thingType === 'vehicles' ? 'bg-orange-500' :
+                        selectedSighting.thingType === 'trash' ? 'bg-amber-700' :
+                        selectedSighting.thingType === 'bags' ? 'bg-purple-500' :
                         'bg-blue-500'
                       }`}>
                         {selectedSighting.thingType.toUpperCase()}

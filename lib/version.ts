@@ -1,14 +1,14 @@
 // Auto-generated at build time - DO NOT EDIT
 export const VERSION = {
   version: '1.3.0',
-  hash: '3a473103cbbbf4ebeca7df2a4bf2c4f9a14ddd9e',
-  buildDate: '2025-10-13T09:21:46.865Z',
+  hash: 'bc69084d11bd4796e7842f21d59336d9e203abeb',
+  buildDate: '2025-10-13T10:17:50.095Z',
   recentChanges: [
+  "Release v1.3.0: Expand types and add address-based location input",
   "manual commit of latest plan and version file",
   "Release v1.2.1: Mobile-friendly list view and auto-generated changelog",
   "Release v1.2.0: Improve address geocoding for Japanese locations",
-  "Release v1.1.0: Add mini maps and address geocoding to list view",
-  "Update Google Maps API key"
+  "Release v1.1.0: Add mini maps and address geocoding to list view"
 ],
 };
 

@@ -21,7 +21,8 @@
       "Bash(curl:*)",
       "Bash(npm run start:*)",
       "Bash(netstat:*)",
-      "Bash(gcloud run deploy:*)"
+      "Bash(gcloud run deploy:*)",
+      "Bash(~/google-cloud-sdk/bin/gcloud builds list --limit=1)"
     ],
     "deny": [],
     "ask": []
