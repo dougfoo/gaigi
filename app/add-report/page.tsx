@@ -160,17 +160,32 @@ export default function AddReport() {
               <input
                 type="file"
                 accept="image/*"
+                capture="environment"
                 onChange={handleFileChange}
                 className="hidden"
-                id="photo-input"
+                id="photo-camera"
               />
-              <label
-                htmlFor="photo-input"
-                className="cursor-pointer inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
-              >
-                📷 Take/Select Photo
-              </label>
-              <p className="text-sm text-gray-500 mt-2">Take a photo or select from gallery</p>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+                id="photo-gallery"
+              />
+              <div className="flex gap-3 justify-center flex-wrap">
+                <label
+                  htmlFor="photo-camera"
+                  className="cursor-pointer inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
+                >
+                  📷 Take Photo
+                </label>
+                <label
+                  htmlFor="photo-gallery"
+                  className="cursor-pointer inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
+                >
+                  🖼️ Choose from Gallery
+                </label>
+              </div>
             </div>
           ) : (
             <div className="relative">
