@@ -125,7 +125,7 @@ export default function ViewMap() {
                       <p className="text-xs text-gray-600 mb-2">{selectedSighting.textDescription}</p>
                     )}
                     <p className="text-xs text-gray-500">
-                      {new Date(selectedSighting.createdAt).toLocaleString()}
+                      {(selectedSighting.createdAt as Date).toLocaleString()}
                     </p>
                   </div>
                 </InfoWindow>

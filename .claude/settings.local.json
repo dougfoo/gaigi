@@ -10,7 +10,9 @@
       "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --skip-install)",
       "Bash(npm install:*)",
       "Bash(npm uninstall:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(firebase login:*)",
+      "Bash(firebase projects:list:*)"
     ],
     "deny": [],
     "ask": []
