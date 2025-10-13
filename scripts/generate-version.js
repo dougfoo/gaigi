@@ -12,18 +12,28 @@ try {
   console.warn('Warning: Could not get git hash');
 }
 
+// Get recent git commits (last 5)
+let recentChanges = [];
+try {
+  const gitLog = execSync('git log -5 --pretty=format:"%s"', { encoding: 'utf-8' }).trim();
+  recentChanges = gitLog.split('\n').filter(line => line.trim() !== '');
+} catch (error) {
+  console.warn('Warning: Could not get git log');
+}
+
 // Get current timestamp
 const buildDate = new Date().toISOString();
 
 // Read package.json version
 const packageJson = require('../package.json');
 
-// Generate version file
+// Generate version file with changelog
 const versionContent = `// Auto-generated at build time - DO NOT EDIT
 export const VERSION = {
   version: '${packageJson.version}',
   hash: '${gitHash}',
   buildDate: '${buildDate}',
+  recentChanges: ${JSON.stringify(recentChanges, null, 2)},
 };
 
 export function getVersionString(): string {
@@ -46,6 +56,10 @@ export function getBuildDate(): string {
     return 'October 13, 2025';
   }
 }
+
+export function getRecentChanges(): string[] {
+  return VERSION.recentChanges;
+}
 `;
 
 // Write to lib/version.ts
@@ -56,3 +70,4 @@ console.log('Generated version file:');
 console.log(`  Version: ${packageJson.version}`);
 console.log(`  Git Hash: ${gitHash.substring(0, 7)}`);
 console.log(`  Build Date: ${buildDate}`);
+console.log(`  Recent Changes: ${recentChanges.length} commits`);

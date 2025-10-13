@@ -167,25 +167,16 @@ export default function ViewList() {
               href={`/detail/${sighting.id}`}
               className="block bg-white rounded-lg border border-gray-300 hover:border-blue-500 hover:shadow-lg transition p-4"
             >
-              <div className="flex gap-4">
-                {/* Thumbnail */}
-                <div className="flex-shrink-0">
-                  <img
-                    src={sighting.thumbnailUrl}
-                    alt={sighting.thingDescription}
-                    className="w-32 h-24 object-cover rounded"
-                  />
-                </div>
-
-                {/* Details */}
-                <div className="flex-grow">
-                  <div className="flex items-start justify-between mb-2">
+              <div className="flex flex-wrap gap-4">
+                {/* Details - flex-grow allows it to take remaining space */}
+                <div className="flex-grow min-w-0">
+                  <div className="flex items-start justify-between mb-2 flex-wrap gap-2">
                     <div>
                       <span className={`inline-block px-3 py-1 rounded text-xs font-semibold text-white ${getTypeBadgeColor(sighting.thingType)}`}>
                         {sighting.thingType.toUpperCase()}
                       </span>
                     </div>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-500 whitespace-nowrap">
                       {(sighting.createdAt as Date).toLocaleDateString()} {(sighting.createdAt as Date).toLocaleTimeString()}
                     </span>
                   </div>
@@ -198,14 +189,19 @@ export default function ViewList() {
                     </p>
                   )}
 
-                  <div className="flex items-center text-sm text-gray-500">
-                    <span className="mr-4">📍 {sighting.address || `${sighting.latitude.toFixed(4)}, ${sighting.longitude.toFixed(4)}`}</span>
+                  <div className="flex items-center text-sm text-gray-500 flex-wrap gap-2">
+                    <span>📍 {sighting.address || `${sighting.latitude.toFixed(4)}, ${sighting.longitude.toFixed(4)}`}</span>
                     {sighting.isAnonymous && <span className="text-xs bg-gray-200 px-2 py-1 rounded">Anonymous</span>}
                   </div>
                 </div>
 
-                {/* Mini Map */}
-                <div className="flex-shrink-0">
+                {/* Images - thumbnail and map together */}
+                <div className="flex gap-2 flex-shrink-0">
+                  <img
+                    src={sighting.thumbnailUrl}
+                    alt={sighting.thingDescription}
+                    className="w-32 h-24 object-cover rounded"
+                  />
                   <img
                     src={getStaticMapUrl(sighting.latitude, sighting.longitude)}
                     alt="Location map"

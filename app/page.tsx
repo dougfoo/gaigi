@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getVersionString, getFullVersionString, getBuildDate } from '@/lib/version';
+import { getVersionString, getFullVersionString, getBuildDate, getRecentChanges } from '@/lib/version';
 
 export default function Home() {
   const [showAbout, setShowAbout] = useState(false);
@@ -77,15 +77,11 @@ export default function Home() {
               </div>
 
               <div>
-                <h3 className="font-semibold mb-2">Latest Changes</h3>
-                <ul className="text-sm text-gray-700 space-y-2 list-disc list-inside">
-                  <li>Photo upload with EXIF GPS extraction</li>
-                  <li>Browser geolocation fallback</li>
-                  <li>Anonymous reporting of suspicious things</li>
-                  <li>Map view with color-coded markers</li>
-                  <li>List view with thumbnails</li>
-                  <li>Mobile-friendly interface</li>
-                  <li>Gallery photo selection support</li>
+                <h3 className="font-semibold mb-2">Recent Changes</h3>
+                <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
+                  {getRecentChanges().map((change, index) => (
+                    <li key={index} className="text-xs leading-relaxed">{change}</li>
+                  ))}
                 </ul>
               </div>
 
