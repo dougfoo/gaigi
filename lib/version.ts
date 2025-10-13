@@ -1,14 +1,14 @@
 // Auto-generated at build time - DO NOT EDIT
 export const VERSION = {
   version: '1.4.0',
-  hash: '208bbef81f4cde3bba30cbcdc42e2068d6c7813e',
-  buildDate: '2025-10-13T10:34:52.034Z',
+  hash: 'd6ab0ff4edee27574f400fefd9ac3bebee612045',
+  buildDate: '2025-10-13T10:44:52.700Z',
   recentChanges: [
+  "Release v1.4.0: Add AI-powered auto-type detection",
   "Fix type error in map InfoWindow badge",
   "Release v1.3.0: Expand types and add address-based location input",
   "manual commit of latest plan and version file",
-  "Release v1.2.1: Mobile-friendly list view and auto-generated changelog",
-  "Release v1.2.0: Improve address geocoding for Japanese locations"
+  "Release v1.2.1: Mobile-friendly list view and auto-generated changelog"
 ],
 };
 
