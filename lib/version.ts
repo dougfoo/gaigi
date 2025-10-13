@@ -1,8 +1,8 @@
 // Auto-generated at build time - DO NOT EDIT
 export const VERSION = {
-  version: '1.0.1',
-  hash: 'b187ea989299d3d8a53ae389a4fb6e9fd18ff8b6',
-  buildDate: '2025-10-13T04:51:52.180Z',
+  version: '1.2.0',
+  hash: '2b5e1eee5479b8147a089b877b486977121d0552',
+  buildDate: '2025-10-13T06:56:43.872Z',
 };
 
 export function getVersionString(): string {
