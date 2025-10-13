@@ -18,7 +18,7 @@ export interface Sighting {
   userId: string | null;
   imageUrl: string;
   thumbnailUrl: string;
-  thingType: 'person' | 'animal' | 'object';
+  thingType: 'people' | 'animals' | 'places' | 'vehicles' | 'trash' | 'bags' | 'objects';
   thingDescription: string;
   location: GeoPoint;
   latitude: number;

@@ -35,11 +35,19 @@ export default function DetailPage() {
 
   const getTypeBadgeColor = (type: string) => {
     switch (type) {
-      case 'person':
+      case 'people':
         return 'bg-red-500';
-      case 'animal':
+      case 'animals':
         return 'bg-yellow-500';
-      case 'object':
+      case 'places':
+        return 'bg-green-500';
+      case 'vehicles':
+        return 'bg-orange-500';
+      case 'trash':
+        return 'bg-amber-700';
+      case 'bags':
+        return 'bg-purple-500';
+      case 'objects':
         return 'bg-blue-500';
       default:
         return 'bg-gray-500';

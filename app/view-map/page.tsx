@@ -58,11 +58,19 @@ export default function ViewMap() {
 
   const getMarkerIcon = (type: string) => {
     switch (type) {
-      case 'person':
+      case 'people':
         return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
-      case 'animal':
+      case 'animals':
         return 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
-      case 'object':
+      case 'places':
+        return 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+      case 'vehicles':
+        return 'http://maps.google.com/mapfiles/ms/icons/orange-dot.png';
+      case 'trash':
+        return 'http://maps.google.com/mapfiles/ms/icons/brown-dot.png';
+      case 'bags':
+        return 'http://maps.google.com/mapfiles/ms/icons/purple-dot.png';
+      case 'objects':
         return 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
       default:
         return 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
@@ -143,15 +151,27 @@ export default function ViewMap() {
 
       <div className="mt-4 p-3 bg-gray-100 rounded-lg">
         <p className="text-sm font-semibold mb-2">Legend:</p>
-        <div className="flex gap-4 text-xs">
+        <div className="flex flex-wrap gap-3 text-xs">
           <div className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-red-500 rounded-full"></span> Person
+            <span className="w-3 h-3 bg-red-500 rounded-full"></span> People
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-yellow-500 rounded-full"></span> Animal
+            <span className="w-3 h-3 bg-yellow-500 rounded-full"></span> Animals
           </div>
           <div className="flex items-center gap-1">
-            <span className="w-3 h-3 bg-blue-500 rounded-full"></span> Object
+            <span className="w-3 h-3 bg-green-500 rounded-full"></span> Places
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="w-3 h-3 bg-orange-500 rounded-full"></span> Vehicles
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="w-3 h-3 bg-amber-700 rounded-full"></span> Trash
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="w-3 h-3 bg-purple-500 rounded-full"></span> Bags
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="w-3 h-3 bg-blue-500 rounded-full"></span> Objects
           </div>
         </div>
       </div>

@@ -10,13 +10,86 @@ export default function AddReport() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [formData, setFormData] = useState({
-    thingType: '' as 'person' | 'animal' | 'object' | '',
+    thingType: '' as 'people' | 'animals' | 'places' | 'vehicles' | 'trash' | 'bags' | 'objects' | '',
+    address: '',
     latitude: '',
     longitude: '',
     textDescription: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationSource, setLocationSource] = useState<'exif' | 'browser' | 'manual'>('manual');
+
+  // Reverse geocode: lat/lng -> address
+  const reverseGeocode = async (lat: number, lng: number): Promise<string> => {
+    try {
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyDMselEdH44QYeEjg1CIn0YuCnjiwjG-E0';
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}&language=en`
+      );
+      const data = await response.json();
+
+      if (data.status === 'OK' && data.results && data.results.length > 0) {
+        const result = data.results[0];
+        const components = result.address_components;
+
+        let street = '';
+        let neighborhood = '';
+        let locality = '';
+        let prefecture = '';
+
+        components.forEach((comp: any) => {
+          if (comp.types.includes('route')) {
+            if (!street) street = comp.long_name;
+          } else if (comp.types.includes('premise') || comp.types.includes('street_address')) {
+            if (!street) street = comp.long_name;
+          }
+          if (comp.types.includes('sublocality_level_2')) {
+            neighborhood = comp.long_name;
+          }
+          if (comp.types.includes('locality')) {
+            locality = comp.long_name;
+          }
+          if (comp.types.includes('administrative_area_level_1')) {
+            prefecture = comp.long_name;
+          }
+        });
+
+        if (street && neighborhood) {
+          return `${street}, ${neighborhood}, ${prefecture}`;
+        } else if (neighborhood && locality) {
+          return `${neighborhood}, ${locality}, ${prefecture}`;
+        } else if (locality && prefecture) {
+          return `${locality}, ${prefecture}`;
+        } else if (prefecture) {
+          return prefecture;
+        }
+      }
+      return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    } catch (error) {
+      console.error('Reverse geocoding error:', error);
+      return `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+    }
+  };
+
+  // Forward geocode: address -> lat/lng
+  const forwardGeocode = async (address: string): Promise<{lat: number, lng: number} | null> => {
+    try {
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyDMselEdH44QYeEjg1CIn0YuCnjiwjG-E0';
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`
+      );
+      const data = await response.json();
+
+      if (data.status === 'OK' && data.results && data.results.length > 0) {
+        const location = data.results[0].geometry.location;
+        return { lat: location.lat, lng: location.lng };
+      }
+      return null;
+    } catch (error) {
+      console.error('Forward geocoding error:', error);
+      return null;
+    }
+  };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -37,10 +110,15 @@ export default function AddReport() {
 
       if (exifData.hasGPS && exifData.latitude && exifData.longitude) {
         // Use GPS data from photo EXIF
+        const lat = exifData.latitude;
+        const lng = exifData.longitude;
+        const address = await reverseGeocode(lat, lng);
+
         setFormData(prev => ({
           ...prev,
-          latitude: exifData.latitude!.toFixed(6),
-          longitude: exifData.longitude!.toFixed(6),
+          address,
+          latitude: lat.toFixed(6),
+          longitude: lng.toFixed(6),
         }));
         setLocationSource('exif');
         console.log('Location extracted from photo EXIF data');
@@ -48,8 +126,11 @@ export default function AddReport() {
         // Fallback to browser geolocation
         try {
           const browserLocation = await getBrowserLocation();
+          const address = await reverseGeocode(browserLocation.latitude, browserLocation.longitude);
+
           setFormData(prev => ({
             ...prev,
+            address,
             latitude: browserLocation.latitude.toFixed(6),
             longitude: browserLocation.longitude.toFixed(6),
           }));
@@ -65,8 +146,11 @@ export default function AddReport() {
       // Try browser geolocation as fallback
       try {
         const browserLocation = await getBrowserLocation();
+        const address = await reverseGeocode(browserLocation.latitude, browserLocation.longitude);
+
         setFormData(prev => ({
           ...prev,
+          address,
           latitude: browserLocation.latitude.toFixed(6),
           longitude: browserLocation.longitude.toFixed(6),
         }));
@@ -83,9 +167,24 @@ export default function AddReport() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!selectedFile || !formData.thingType || !formData.latitude || !formData.longitude) {
-      alert('Please fill in all required fields (photo, type, location)');
+    if (!selectedFile || !formData.thingType || !formData.address) {
+      alert('Please fill in all required fields (photo, type, address)');
       return;
+    }
+
+    // If user edited the address, we need to forward geocode it to get lat/lng
+    let finalLat = formData.latitude;
+    let finalLng = formData.longitude;
+
+    if (!finalLat || !finalLng) {
+      // Forward geocode the address
+      const coords = await forwardGeocode(formData.address);
+      if (!coords) {
+        alert('Could not find coordinates for this address. Please enter a valid address.');
+        return;
+      }
+      finalLat = coords.lat.toString();
+      finalLng = coords.lng.toString();
     }
 
     setIsSubmitting(true);
@@ -118,8 +217,8 @@ export default function AddReport() {
           thumbnailUrl,
           thingType: formData.thingType,
           thingDescription: `Auto-detected: ${formData.thingType}`,
-          latitude: formData.latitude,
-          longitude: formData.longitude,
+          latitude: finalLat,
+          longitude: finalLng,
           locationVerified: true,
           textDescription: formData.textDescription,
           userId: null, // Anonymous for now
@@ -220,48 +319,35 @@ export default function AddReport() {
             required
           >
             <option value="">Select type...</option>
-            <option value="person">Person</option>
-            <option value="animal">Animal</option>
-            <option value="object">Object</option>
+            <option value="people">👥 People</option>
+            <option value="animals">🐾 Animals</option>
+            <option value="places">🏢 Places</option>
+            <option value="vehicles">🚗 Vehicles</option>
+            <option value="trash">🗑️ Trash</option>
+            <option value="bags">🎒 Bags</option>
+            <option value="objects">📦 Objects</option>
           </select>
         </div>
 
-        {/* Location */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-semibold mb-2">
-              Latitude <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="number"
-              step="any"
-              value={formData.latitude}
-              onChange={(e) => setFormData({ ...formData, latitude: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-black"
-              placeholder="37.7749"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-semibold mb-2">
-              Longitude <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="number"
-              step="any"
-              value={formData.longitude}
-              onChange={(e) => setFormData({ ...formData, longitude: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-black"
-              placeholder="-122.4194"
-              required
-            />
-          </div>
+        {/* Location Address */}
+        <div>
+          <label className="block text-sm font-semibold mb-2">
+            Address (auto-filled if possible) <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            value={formData.address}
+            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-black"
+            placeholder="e.g., Shirokanedai, Minato City, Tokyo"
+            required
+          />
+          <p className="text-sm text-gray-500 mt-1">
+            {locationSource === 'exif' && '📷 Address from photo GPS data (editable)'}
+            {locationSource === 'browser' && '📍 Address from your device location (editable)'}
+            {locationSource === 'manual' && 'Enter address manually or upload a photo with GPS data'}
+          </p>
         </div>
-        <p className="text-sm text-gray-500">
-          {locationSource === 'exif' && '📷 Location extracted from photo GPS data'}
-          {locationSource === 'browser' && '📍 Location detected from your device'}
-          {locationSource === 'manual' && 'Enter location manually or allow location access'}
-        </p>
 
         {/* Description */}
         <div>
