@@ -48,6 +48,3 @@ firestore-debug.log
 *.pem
 *.tsbuildinfo
 next-env.d.ts
-
-# Auto-generated version file
-lib/version.ts

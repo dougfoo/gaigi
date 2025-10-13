@@ -23,7 +23,11 @@
       "Bash(netstat:*)",
       "Bash(gcloud run deploy:*)",
       "Bash(~/google-cloud-sdk/bin/gcloud builds list --limit=1)",
-      "Bash(node scripts/generate-version.js:*)"
+      "Bash(node scripts/generate-version.js:*)",
+      "Bash(~/google-cloud-sdk/bin/gcloud run services logs read gaigi --limit 20)",
+      "Bash(~/google-cloud-sdk/bin/gcloud services enable vision.googleapis.com --project=gaigi-1f735)",
+      "Bash(git log:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
