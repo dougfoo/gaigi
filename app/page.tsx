@@ -1,6 +1,10 @@
 'use client';
 
+import { useState } from 'react';
+
 export default function Home() {
+  const [showAbout, setShowAbout] = useState(false);
+
   const handleLoginClick = () => {
     alert('Coming soon');
   };
@@ -35,14 +39,73 @@ export default function Home() {
         </a>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-8 flex gap-4">
         <button
           onClick={handleLoginClick}
           className="text-gray-600 hover:text-gray-900 underline"
         >
           Login
         </button>
+        <button
+          onClick={() => setShowAbout(true)}
+          className="text-gray-600 hover:text-gray-900 underline"
+        >
+          About
+        </button>
       </div>
+
+      {/* About Modal */}
+      {showAbout && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" onClick={() => setShowAbout(false)}>
+          <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-start mb-4">
+              <h2 className="text-2xl font-bold">About GAIGI</h2>
+              <button
+                onClick={() => setShowAbout(false)}
+                className="text-gray-500 hover:text-gray-700 text-2xl"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-gray-600">Version 1.0.0</p>
+                <p className="text-sm text-gray-600">Released: January 2025</p>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">Latest Changes</h3>
+                <ul className="text-sm text-gray-700 space-y-2 list-disc list-inside">
+                  <li>Photo upload with EXIF GPS extraction</li>
+                  <li>Browser geolocation fallback</li>
+                  <li>Anonymous reporting of suspicious things</li>
+                  <li>Map view with color-coded markers</li>
+                  <li>List view with thumbnails</li>
+                  <li>Mobile-friendly interface</li>
+                  <li>Gallery photo selection support</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="font-semibold mb-2">Coming Soon</h3>
+                <ul className="text-sm text-gray-700 space-y-2 list-disc list-inside">
+                  <li>User authentication with Google OAuth</li>
+                  <li>AI-powered auto-detection of objects</li>
+                  <li>Advanced filtering and search</li>
+                  <li>Map marker clustering</li>
+                </ul>
+              </div>
+
+              <div className="pt-4 border-t">
+                <p className="text-xs text-gray-500">
+                  GAIGI is a mobile-first web application for reporting and tracking suspicious sightings.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
