@@ -18,6 +18,7 @@ export default function AddReport() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [locationSource, setLocationSource] = useState<'exif' | 'browser' | 'manual'>('manual');
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   // Reverse geocode: lat/lng -> address
   const reverseGeocode = async (lat: number, lng: number): Promise<string> => {
@@ -161,7 +162,35 @@ export default function AddReport() {
       }
     }
 
-    // TODO: Auto-detect thing type with Vision AI
+    // Auto-detect thing type with Vision AI
+    setIsAnalyzing(true);
+    try {
+      const formDataAnalyze = new FormData();
+      formDataAnalyze.append('image', file);
+
+      const analyzeRes = await fetch('/api/analyze-image', {
+        method: 'POST',
+        body: formDataAnalyze,
+      });
+
+      if (analyzeRes.ok) {
+        const { detectedType, labels } = await analyzeRes.json();
+        console.log('Vision API detected type:', detectedType, 'Labels:', labels);
+
+        if (detectedType) {
+          setFormData(prev => ({
+            ...prev,
+            thingType: detectedType,
+          }));
+        }
+      } else {
+        console.error('Vision API analysis failed');
+      }
+    } catch (error) {
+      console.error('Error analyzing image:', error);
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -316,9 +345,10 @@ export default function AddReport() {
             value={formData.thingType}
             onChange={(e) => setFormData({ ...formData, thingType: e.target.value as any })}
             className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-100 text-black"
+            disabled={isAnalyzing}
             required
           >
-            <option value="">Select type...</option>
+            <option value="">{isAnalyzing ? '🔍 Auto-detecting...' : 'Select type...'}</option>
             <option value="people">👥 People</option>
             <option value="animals">🐾 Animals</option>
             <option value="places">🏢 Places</option>
@@ -327,6 +357,12 @@ export default function AddReport() {
             <option value="bags">🎒 Bags</option>
             <option value="objects">📦 Objects</option>
           </select>
+          {isAnalyzing && (
+            <p className="text-sm text-blue-600 mt-1">🤖 Analyzing image with AI...</p>
+          )}
+          {formData.thingType && !isAnalyzing && (
+            <p className="text-sm text-green-600 mt-1">✓ Type detected (you can change if needed)</p>
+          )}
         </div>
 
         {/* Location Address */}
