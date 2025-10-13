@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { getVersionString, getFullVersionString, getBuildDate } from '@/lib/version';
 
 export default function Home() {
   const [showAbout, setShowAbout] = useState(false);
@@ -70,8 +71,9 @@ export default function Home() {
 
             <div className="space-y-4">
               <div>
-                <p className="text-sm text-gray-600">Version 1.0.0</p>
-                <p className="text-sm text-gray-600">Released: October 13, 2025</p>
+                <p className="text-sm text-gray-600">Version {getVersionString()}</p>
+                <p className="text-xs text-gray-500">Build: {getFullVersionString()}</p>
+                <p className="text-sm text-gray-600 mt-1">Released: {getBuildDate()}</p>
               </div>
 
               <div>

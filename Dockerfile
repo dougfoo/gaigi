@@ -16,6 +16,12 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Set build-time environment variables for versioning
+ARG GIT_HASH=unknown
+ARG BUILD_DATE=unknown
+ENV NEXT_PUBLIC_GIT_HASH=${GIT_HASH}
+ENV NEXT_PUBLIC_BUILD_DATE=${BUILD_DATE}
+
 # Build Next.js
 RUN npm run build
 
