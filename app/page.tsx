@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-8">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-2">🚨 GAIGI 外疑</h1>
+        <h1 className="text-4xl font-bold mb-2">🚨 GaiGi 外疑</h1>
         <p className="text-gray-600">Report Suspicious Things</p>
       </div>
 
@@ -60,7 +60,7 @@ export default function Home() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" onClick={() => setShowAbout(false)}>
           <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex justify-between items-start mb-4">
-              <h2 className="text-2xl font-bold">About GAIGI</h2>
+              <h2 className="text-2xl font-bold">About GaiGi</h2>
               <button
                 onClick={() => setShowAbout(false)}
                 className="text-gray-500 hover:text-gray-700 text-2xl"
@@ -101,7 +101,7 @@ export default function Home() {
 
               <div className="pt-4 border-t">
                 <p className="text-xs text-gray-500">
-                  GAIGI is a mobile-first web application for reporting and tracking suspicious sightings.
+                  GaiGi is a mobile-first web application for reporting and tracking suspicious sightings.
                 </p>
               </div>
             </div>

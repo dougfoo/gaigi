@@ -1,0 +1,7 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="64" height="64" fill="#2563eb" rx="8"/>
+
+  <!-- GG Text -->
+  <text x="32" y="45" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="white" text-anchor="middle">GG</text>
+</svg>
