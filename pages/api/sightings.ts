@@ -6,7 +6,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Get all sightings
     try {
       const sightings = await getAllSightings();
-      return res.status(200).json({ sightings });
+      // Convert Date objects to ISO strings for JSON serialization
+      const serializedSightings = sightings.map(s => ({
+        ...s,
+        createdAt: s.createdAt instanceof Date ? s.createdAt.toISOString() : s.createdAt,
+        updatedAt: s.updatedAt instanceof Date ? s.updatedAt.toISOString() : s.updatedAt,
+      }));
+      return res.status(200).json({ sightings: serializedSightings });
     } catch (error) {
       console.error('Error fetching sightings:', error);
       return res.status(500).json({ error: 'Failed to fetch sightings' });

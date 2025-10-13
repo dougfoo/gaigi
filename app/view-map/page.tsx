@@ -26,7 +26,13 @@ export default function ViewMap() {
     fetch('/api/sightings')
       .then(res => res.json())
       .then(data => {
-        setSightings(data.sightings || []);
+        // Convert ISO string dates back to Date objects
+        const sightings = (data.sightings || []).map((s: any) => ({
+          ...s,
+          createdAt: new Date(s.createdAt),
+          updatedAt: new Date(s.updatedAt),
+        }));
+        setSightings(sightings);
         setLoading(false);
       })
       .catch(error => {
