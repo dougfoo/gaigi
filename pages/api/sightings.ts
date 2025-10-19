@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getAllSightings, createSighting } from '@/lib/firestore';
+import { adminDb } from '@/lib/firebase-admin';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
@@ -41,6 +42,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         textDescription: data.textDescription || '',
         isAnonymous: data.userId ? false : true,
       } as any);
+
+      // Also enqueue an email by adding a document to the "mail" collection
+      // This uses the Firebase Admin SDK so it runs server-side with proper privileges.
+      try {
+        await adminDb.collection('mail').add({
+          to: 'doug.cha@gmail.com',
+          message: {
+            subject: 'New GaiGi entry!',
+            html: 'Someone entered a <b>new</b> entry.',
+          },
+        });
+      } catch (mailError) {
+        // Do not fail the main request if email queueing fails; just log it
+        console.error('Failed to enqueue email notification:', mailError);
+      }
 
       return res.status(201).json({ id: sightingId, success: true });
     } catch (error) {

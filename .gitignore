@@ -48,3 +48,4 @@ firestore-debug.log
 *.pem
 *.tsbuildinfo
 next-env.d.ts
+scripts/serviceKey.json
