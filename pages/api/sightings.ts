@@ -49,8 +49,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         await adminDb.collection('mail').add({
           to: 'doug.cha@gmail.com',
           message: {
-            subject: 'New GaiGi entry!',
-            html: 'Someone entered a <b>new</b> entry.',
+            subject: 'New GaiGi entry (1.2) !',
+            html: `Someone entered a <b>new</b> entry.<br/>Type: ${data.thingType ?? ''}<br/>Description: ${data.textDescription ?? ''}`,
           },
         });
       } catch (mailError) {

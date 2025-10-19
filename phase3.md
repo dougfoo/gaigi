@@ -17,6 +17,8 @@
    - Page indicator: "Page X of Y"
    - "Next →" button (disabled on last page)
 5. Default sort: newest first (by createdAt DESC)
+6. Add comments feature that shows # of comments on the list view, and comment details on the detail view (read and add new comments)
+7. Fix the list view so clicking on map goes to google maps
 
 **UI Design:**
 ```
