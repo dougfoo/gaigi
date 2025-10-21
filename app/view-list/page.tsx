@@ -217,11 +217,27 @@ export default function ViewList() {
                     alt={sighting.thingDescription}
                     className="w-32 h-24 object-cover rounded"
                   />
-                  <img
-                    src={getStaticMapUrl(sighting.latitude, sighting.longitude)}
-                    alt="Location map"
-                    className="w-32 h-24 object-cover rounded border border-gray-200"
-                  />
+                  <button
+                    type="button"
+                    title="Open in Google Maps"
+                    aria-label="Open location in Google Maps"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      window.open(
+                        `https://www.google.com/maps?q=${sighting.latitude},${sighting.longitude}`,
+                        '_blank',
+                        'noopener,noreferrer'
+                      );
+                    }}
+                    className="inline-block"
+                  >
+                    <img
+                      src={getStaticMapUrl(sighting.latitude, sighting.longitude)}
+                      alt="Open location in Google Maps"
+                      className="w-32 h-24 object-cover rounded border border-gray-200 cursor-pointer"
+                    />
+                  </button>
                 </div>
               </div>
             </Link>
